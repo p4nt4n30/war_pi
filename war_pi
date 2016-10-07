@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+#title           :war_pi
+#description     :This application will set up your interface and start kismet services
+#author		 	 :p4nT4N30
+#date            :20161007
+#version         :1.0
+#usage		     :bash (sudo) war_pi [options]
+#notes           :war driving is fun, drink while war walking but not while driving!!!
+#####################################################################################
