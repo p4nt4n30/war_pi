@@ -7,3 +7,37 @@
 #usage		     :bash (sudo) war_pi [options]
 #notes           :war driving is fun, drink while war walking but not while driving!!!
 #####################################################################################
+
+require "optparse"
+
+module WarDrivingPi
+  class Application
+    def run(argv)
+
+    end #end run
+
+    def parse_options(argv)
+
+    end #end parse_options
+
+    def banner
+      puts "██████╗ ██╗  ██╗███╗   ██╗████████╗██╗  ██╗███╗   ██╗██████╗  ██████╗ "
+      sleep 1
+      puts "██╔══██╗██║  ██║████╗  ██║╚══██╔══╝██║  ██║████╗  ██║╚════██╗██╔═████╗"
+      sleep 1
+      puts "██████╔╝███████║██╔██╗ ██║   ██║   ███████║██╔██╗ ██║ █████╔╝██║██╔██║"
+      sleep 1
+      puts "██╔═══╝ ╚════██║██║╚██╗██║   ██║   ╚════██║██║╚██╗██║ ╚═══██╗████╔╝██║"
+      sleep 1
+      puts "██║          ██║██║ ╚████║   ██║        ██║██║ ╚████║██████╔╝╚██████╔╝"
+      sleep 1
+      puts "╚═╝          ╚═╝╚═╝  ╚═══╝   ╚═╝        ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ "
+      sleep 3
+    end #end banner
+  end #end class Application
+
+end #end the module
+
+o=WarDrivingPi::Application.new
+
+o.run($argv)
