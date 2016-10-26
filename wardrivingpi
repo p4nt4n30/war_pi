@@ -13,15 +13,28 @@ require "optparse"
 module WarDrivingPi
   $argv = ARGV
   $options = {}
+  $kismetPath = '/etc/kismet/kismet.conf' #ubuntugnome 16.04
+  #$kismetPath = '/usr/local/etc/kismet.conf' #raspbian
+  $interfacePath = '/sys/class/net'
+
   class Application
+
     def run(argv)
       parse_options(argv)
       banner
-      puts ""
+      puts
       if optionsValidation
         configinterface($options[:interface])
+        puts
         configkismet($options[:interface])
+        puts
         startkismetserver
+        if $options[:client]
+          puts
+          puts "Starting the Kismet Client"
+          sleep 3
+          startkismetclient
+        end
       end
     end #end run
 
@@ -39,10 +52,8 @@ module WarDrivingPi
           puts "Release Date: 10/9/2016"
           exit
         end #end Version
-        opts.on("-c","--check-system","check to see current system setting for kismet") do
-          puts "I am checking to see what the current kismet and interface settings are."
-          puts ""
-
+        opts.on("-C","--check-system","check to see current system setting for kismet") do
+          puts systemcheck
           exit
         end #end check-system
         opts.on("-i","--interface=Interface","Interface") do |i|
@@ -50,9 +61,10 @@ module WarDrivingPi
         end #end interface
         opts.on("-p","--prefix=Prefix","log file prefix") do |p|
           $options[:prefix] = p
+
         end #end prefix
         opts.on("-c","--client","Start the Kismet client") do
-          $options[:client] = "1"
+          $options[:client] = true
         end #end client
       end.parse! #end OptionsParser
     end #end parse_options
@@ -68,70 +80,133 @@ module WarDrivingPi
       else
         r = true
       end
-      if $options[:prefix].nil?
-        puts "you did not enter a prefix. the default prefix will be used"
-      end
-
       if r == true
         return true
       end
     end #end optionsValidation
 
     def banner
-      puts ""
+      puts
       puts "War Driving is FUN!!!!"
       puts "       Dont Drink While War Driving but do drink while war walking"
       puts "War Driving is FUN!!!!"
-      puts ""
-      puts ""
+      puts
       puts "██████╗ ██╗  ██╗███╗   ██╗████████╗██╗  ██╗███╗   ██╗██████╗  ██████╗ "
-      sleep 1
+      sleep (1.0/2.0)
       puts "██╔══██╗██║  ██║████╗  ██║╚══██╔══╝██║  ██║████╗  ██║╚════██╗██╔═████╗"
-      sleep 1
+      sleep (1.0/2.0)
       puts "██████╔╝███████║██╔██╗ ██║   ██║   ███████║██╔██╗ ██║ █████╔╝██║██╔██║"
-      sleep 1
+      sleep (1.0/2.0)
       puts "██╔═══╝ ╚════██║██║╚██╗██║   ██║   ╚════██║██║╚██╗██║ ╚═══██╗████╔╝██║"
-      sleep 1
+      sleep (1.0/2.0)
       puts "██║          ██║██║ ╚████║   ██║        ██║██║ ╚████║██████╔╝╚██████╔╝"
-      sleep 1
+      sleep (1.0/2.0)
       puts "╚═╝          ╚═╝╚═╝  ╚═══╝   ╚═╝        ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ "
-      sleep 1
-      puts ""
+      puts
     end #end banner
+
+    def getncsource
+      curncsource = ""
+      File.open($kismetPath,"r") do |f|
+        f.each_line do |line|
+          if line =~ /^ncsource=*/
+            curncsource = line
+          end
+        end
+      end
+      return curncsource
+    end #end getncsource
+
+    def getwifiinterfaces
+      myInterfaces = Dir.entries($interfacePath).select {|entry| File.directory? File.join($interfacePath, entry) and !(entry=='.' || entry=='..')}
+      i = 0
+      myReturn = Array.new
+      myInterfaces.each do |myInterface|
+      	mypath = "#{$interfacePath}/#{myInterface}/wireless"
+      	if Dir.exists?(mypath)
+      	  myReturn[i] = myInterface
+          i += 1
+      	end
+      end
+      return myReturn
+    end #end getwifiinterfaces
+
+    def ismonitormode
+      myReturn = Array.new
+      i = 0
+      getwifiinterfaces.each do |myInterface|
+        mypath = "#{$interfacePath}/#{myInterface}/type"
+        File.open(mypath,"r") do |f|
+          yn = f.read
+          #puts $yn[0..2]
+          if yn[0..2] == '803'
+            #puts 'hello 803'
+            #puts myInterface
+            myReturn[i] = myInterface
+          end
+          i += 1
+        end
+      end
+      return myReturn
+    end #end ismonitormode
+
+    def systemcheck
+      puts "Checking the kismet.conf files current ncsource setting"
+      sleep 1
+      puts "Current ncsource is: #{getncsource}"
+      puts
+      puts "Getting WiFi Intfaces."
+      sleep 1
+      puts "Your WiFi interfaces are:"
+      puts "#{getwifiinterfaces}"
+      puts
+      puts "Checking to see if any interfaces are in monitor mode:"
+      sleep 1
+      if ismonitormode.length == 0
+        puts "There are currently no WiFi interfaces in monitor mode."
+      else
+        puts "You monitor mode WiFi interface(s) are: #{ismonitormode}"
+      end
+    end #end systemcheck
+
     def configinterface(input)
       system "ifconfig #{input} down"
       system "iwconfig #{input} mode monitor"
       system "ifconfig #{input} up"
       puts "Interface #{input} is now in monitor mode."
-      puts ""
+      puts
     end #end configinterface
+
     def configkismet(input)
-      #$filename = '/usr/local/etc/kismet.conf' #raspbian
-      $filename = '/etc/kismet/kismet.conf' #ubuntugnome 16.04
-      $text =  File.read($filename)
-      File.open($filename,"r") do |f|
-        f.each_line do |line|
-          if line =~ /^ncsource=*/
-            $curncsource = line
-            File.write($filename, $text.gsub(/#{$curncsource}/, "ncsource=#{input}\n"))
-          end
+      myncsource = getncsource
+      text = IO.readlines($kismetPath)
+      for line in text
+        if line[myncsource]
+          line[myncsource] = "ncsource=#{input}\n"
         end
       end
+      File.open($kismetPath, "w") do |f|
+          for line in text
+            f.puts(line)
+          end
+      end
       puts "The kismet.conf file has been updated with the correct ncsource."
-      puts ""
+      puts
     end #end configkismet
+
     def startkismetserver
       if $options[:prefix].nil?
         $options[:prefix] = "wardrivingpi"
       end
-      $kPID = spawn("kismet_server -t #{$options[:prefix]}", :out=>"/dev/null" )
-      puts "Kismet_server is now running as a background job! PID=#{$kPID}"
+      kPID = spawn("kismet_server -t #{$options[:prefix]}", :out=>"/dev/null" )
+      puts "Kismet_server is now running as a background job! PID=#{kPID}"
     end #end startkismetserver
-    def checksystem()
 
-    end #end checksystem
+    def startkismetclient
+      system "kismet_client"
+    end #end startkismetcleint
+
   end #end class Application
-
 end #end the module
 
 o=WarDrivingPi::Application.new
