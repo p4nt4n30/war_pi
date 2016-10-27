@@ -13,8 +13,8 @@ require "optparse"
 module WarDrivingPi
   $argv = ARGV
   $options = {}
-  $kismetPath = '/etc/kismet/kismet.conf' #ubuntugnome 16.04
-  #$kismetPath = '/usr/local/etc/kismet.conf' #raspbian
+  #$kismetPath = '/etc/kismet/kismet.conf' #ubuntugnome 16.04
+  $kismetPath = '/usr/local/etc/kismet.conf' #raspbian
   $interfacePath = '/sys/class/net'
 
   class Application
