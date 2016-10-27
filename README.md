@@ -76,12 +76,12 @@ The Kismet client gui will be loaded in the terminal window.  You might be promp
 
 ## History
 
-TODO: Write history
+10/27/2016 - Initial Release
 
 ## Credits
 
-TODO: Write credits
+So far I am the only one that has worked on this project.  If you would like to get envolved on the project send me a email to p4nt4n30 at gmail dot com.
 
 ## License
-
-TODO: Write license
+Please do not remove my banner or claim the script as your own. 
+Use this script as you see fit. Just give kudos where due!!!!
