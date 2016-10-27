@@ -2,9 +2,9 @@
 #title           :war_pi
 #description     :This application will set up your interface and start kismet services
 #author		 	 :p4nT4N30
-#date            :20161007
+#date            :20161025
 #version         :1.0
-#usage		     :bash (sudo) wardrivingpi [options]
+#usage		     :bash (sudo) wardrivingpi -i <interface> [options]
 #notes           :war driving is fun, drink while war walking but not while driving!!!
 #####################################################################################
 
@@ -40,7 +40,7 @@ module WarDrivingPi
 
     def parse_options(argv)
       OptionParser.new do |opts|
-        opts.banner = "Usage: sudo wardrivingpi [options]"
+        opts.banner = "Usage: sudo wardrivingpi -i <interface> [options]"
 
         opts.on("-h","--help","Prints this help page") do
           puts opts
@@ -49,7 +49,7 @@ module WarDrivingPi
         end #end help
         opts.on("-V","--Version","Displays version and date of release") do
           puts "Version: 1.0"
-          puts "Release Date: 10/9/2016"
+          puts "Release Date: 10/25/2016"
           exit
         end #end Version
         opts.on("-C","--check-system","check to see current system setting for kismet") do
