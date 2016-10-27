@@ -15,7 +15,7 @@ getting the help menu:
 
 displays:
 
-Usage: sudo wardrivingpi -i <interface> [options]  
+Usage: sudo wardrivingpi -i {interface} [options]  
     -h, --help                       Prints this help page  
     -V, --Version                    Displays version and date of release   
     -C, --check-system               check to see current system setting for kismet  
@@ -43,7 +43,7 @@ There are currently no WiFi interfaces in monitor mode.
 ---------------------------------------------------------------------------------------------------
 Starting with just the kismet_server (no client gui), everything will run in the background
 
-sudo ./wardrivingpi -i <interface> 
+sudo ./wardrivingpi -i {interface}
 example: sudo ./wardrivingpi -i wlx
 
 displays:
@@ -59,7 +59,7 @@ Kismet_server is now running as a background job! PID=2563
 ----------------------------------------------------------------------------------------------------
 Starting kismet with the client cmd gui
 
-sudo ./wardrivingpi -i <interface> -c
+sudo ./wardrivingpi -i {interface} -c
 example: sudo ./wardrivingpi -i wlx -c
 
 displays:
