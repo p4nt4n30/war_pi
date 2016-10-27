@@ -15,13 +15,13 @@ getting the help menu:
 
 displays:
 
-Usage: sudo wardrivingpi -i <interface> [options]
-    -h, --help                       Prints this help page
-    -V, --Version                    Displays version and date of release
-    -C, --check-system               check to see current system setting for kismet
-    -i, --interface=Interface        Interface
-    -p, --prefix=Prefix              log file prefix
-    -c, --client                     Start the Kismet client
+Usage: sudo wardrivingpi -i <interface> [options] \n
+    -h, --help                       Prints this help page \n
+    -V, --Version                    Displays version and date of release \n
+    -C, --check-system               check to see current system setting for kismet \n
+    -i, --interface=Interface        Interface \n
+    -p, --prefix=Prefix              log file prefix \n
+    -c, --client                     Start the Kismet client \n
 
 ---------------------------------------------------------------------------------------------------
 Checking your current system stat for kismet
