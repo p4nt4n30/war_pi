@@ -56,7 +56,8 @@ The kismet.conf file has been updated with the correct ncsource.
 
 Kismet_server is now running as a background job! PID=2563
 
-----------------------------------------------------------------------------------------------------Starting kismet with the client cmd gui
+----------------------------------------------------------------------------------------------------
+Starting kismet with the client cmd gui
 
 sudo ./wardrivingpi -i <interface> -c
 example: sudo ./wardrivingpi -i wlx -c
