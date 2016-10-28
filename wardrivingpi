@@ -138,10 +138,7 @@ module WarDrivingPi
         mypath = "#{$interfacePath}/#{myInterface}/type"
         File.open(mypath,"r") do |f|
           yn = f.read
-          #puts $yn[0..2]
           if yn[0..2] == '803'
-            #puts 'hello 803'
-            #puts myInterface
             myReturn[i] = myInterface
           end
           i += 1
