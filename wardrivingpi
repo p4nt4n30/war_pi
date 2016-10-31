@@ -162,7 +162,7 @@ module WarDrivingPi
       if ismonitormode.length == 0
         puts "There are currently no WiFi interfaces in monitor mode."
       else
-        puts "You monitor mode WiFi interface(s) are: #{ismonitormode}"
+        puts "Your monitor mode WiFi interface(s) are: #{ismonitormode}"
       end
     end #end systemcheck
 
